@@ -11,7 +11,6 @@
 
     var nodesWithText = [];
 
-    // Create a TreeWalker starting from the root of the document
     var walker = document.createTreeWalker(
         document.body, // Root node
         NodeFilter.SHOW_TEXT, // Show only text nodes
@@ -19,7 +18,6 @@
         false
     );
 
-    // Iterate through text nodes and collect nodes with non-empty content
     while (walker.nextNode()) {
         if (walker.currentNode.textContent.trim() !== '') {
             nodesWithText.push(walker.currentNode);
@@ -38,10 +36,35 @@
           const wordNode = document.createElement('span');
           wordNode.textContent = word;
           console.log("splitting");
-          //findChinese(wordNode);
           parent.insertBefore(wordNode, node.previousSibling);
       }
     }
+
+    // function splitChar() {
+    //   const walker = document.createTreeWalker(
+    //     document.body,
+    //     NodeFilter.SHOW_TEXT,
+    //     null,
+    //     false
+    //   );
+    
+    //   while (walker.nextNode()) {
+    //     if (walker.currentNode.textContent.trim() !== '') {
+    //       const textNode = walker.currentNode;
+      
+    //       const chars = textNode.textContent.trim().split('');
+
+    //       textNode.textContent = '';
+      
+    //       for (const char of chars) {
+    //         const charNode = document.createElement('span');
+    //         charNode.textContent = char;
+      
+    //         textNode.parentNode.insertBefore(charNode, textNode.previousSibling);
+    //       }
+    //     }
+    //   }
+    // }
 
     function findChinese(node){
       browser.i18n.detectLanguage(node.textContent.trim()).then((langInfo) => {
@@ -56,9 +79,7 @@
 
     function insertPinyin() {
       console.log("insert pinyin called");
-      for (const node of nodesWithText){
-        splitWords(node);
-      }
+      splitChar();
     }
 
     function replacePinyin() {
