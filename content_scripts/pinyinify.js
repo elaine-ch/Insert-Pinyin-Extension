@@ -43,11 +43,14 @@
       }
     }
 
+    var origNodesWithText = [];
+
     function findChinese(node){
+      origNodesWithText.push(node.textContent);
       browser.i18n.detectLanguage(node.textContent.trim()).then((langInfo) => {
         console.log(langInfo);
         if(langInfo.isReliable && (langInfo.languages[0].language == 'zh' || langInfo.languages[0].language == 'zh-CN' || langInfo.languages[0].language == 'zh-TW')){
-          console.log("chinese detected!");
+          console.log(pinyin(node.textContent));
         }
       }).catch((err) => {
         console.log(err + " detect lang no work");
@@ -62,6 +65,7 @@
     }
 
     function replacePinyin() {
+      console.log("method being called");
       for (const node of nodesWithText){
         findChinese(node);
       }
@@ -72,12 +76,10 @@
     }
   
     browser.runtime.onMessage.addListener((message) => {
-      if (message.command === "add") {
-        insertPinyin();
+      if (message.command === "replace") {
+        replacePinyin();
       } else if (message.command === "reset") {
         removePinyin();
-      } else if (message.command === "replace") {
-        replacePinyin();
       }
     });
   })();

@@ -10,21 +10,11 @@
 * Listen for clicks on the buttons, and send the appropriate message to
 * the content script in the page.
 */
+
+import pinyin from 'pinyin';
+
 function listenForClicks() {
   document.addEventListener("click", (e) => {
-
-    /**
-     * Insert the page-hiding CSS into the active tab,
-     * then get the beast URL and
-     * send a "beastify" message to the content script in the active tab.
-     */
-    function add(tabs) {
-      //browser.tabs.insertCSS({ code: hidePage }).then(() => {
-        browser.tabs.sendMessage(tabs[0].id, {
-          command: "add",
-        });
-      //});
-    }
 
     function replace(tabs) {
       //browser.tabs.removeCSS({ code: hidePage }).then(() => {
@@ -66,16 +56,11 @@ function listenForClicks() {
         .query({ active: true, currentWindow: true })
         .then(reset)
         .catch(reportError);
-    } else if (e.target.type === "replace") {
-      browser.tabs
-        .query({ active: true, currentWindow: true })
-        .then(replace)
-        .catch(reportError);
     }
     else {
       browser.tabs
         .query({ active: true, currentWindow: true })
-        .then(add)
+        .then(replace)
         .catch(reportError);
     }
   });
